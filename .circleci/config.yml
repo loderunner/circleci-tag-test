@@ -66,7 +66,10 @@ jobs:
 workflows:
   Echo tag:
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            branches:
+              only: /.*/
 
   Run when truthy tag:
     when: << pipeline.git.tag >>
