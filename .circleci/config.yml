@@ -70,6 +70,8 @@ workflows:
           filters:
             branches:
               only: /.*/
+            tags:
+              only: /.*/
 
   Run when truthy tag:
     when: << pipeline.git.tag >>
