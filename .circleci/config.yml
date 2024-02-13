@@ -1,0 +1,129 @@
+version: 2.1
+
+jobs:
+  Echo tag:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - when:
+          condition: << pipeline.git.tag >>
+          steps:
+            - run: echo Tag << pipeline.git.tag >> is truthy
+      - when:
+          condition:
+            not: << pipeline.git.tag >>
+          steps:
+            - run: echo Tag << pipeline.git.tag >> is not truthy
+      - unless:
+          condition: << pipeline.git.tag >>
+          steps:
+            - run: echo Tag << pipeline.git.tag >> is not truthy
+      - when:
+          condition:
+            equal:
+              - << pipeline.git.tag >>
+              - ""
+          steps:
+            - run: echo Tag << pipeline.git.tag >> is empty string
+      - when:
+          condition:
+            not:
+              equal:
+                - << pipeline.git.tag >>
+                - ""
+          steps:
+            - run: echo Tag << pipeline.git.tag >> is not empty string
+      - unless:
+          condition:
+            equal:
+              - << pipeline.git.tag >>
+              - ""
+          steps:
+            - run: echo Tag << pipeline.git.tag >> is not empty string
+      - when:
+          condition:
+            matches:
+              value: << pipeline.git.tag >>
+              pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
+          steps:
+            - run: echo Tag << pipeline.git.tag >> matches version number
+      - when:
+          condition:
+            not:
+              matches:
+                value: << pipeline.git.tag >>
+                pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
+          steps:
+            - run: echo Tag << pipeline.git.tag >> does not match version number
+      - unless:
+          condition:
+            matches:
+              value: << pipeline.git.tag >>
+              pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
+          steps:
+            - run: echo Tag << pipeline.git.tag >> does not match version number
+
+workflows:
+  Echo tag:
+    jobs:
+      - Echo tag
+
+  Run when truthy tag:
+    when: << pipeline.git.tag >>
+    jobs:
+      - Echo tag
+
+  Run unless truthy tag:
+    unless: << pipeline.git.tag >>
+    jobs:
+      - Echo tag
+
+  Run when empty string tag:
+    when:
+      equal:
+        - << pipeline.git.tag >>
+        - ""
+    jobs:
+      - Echo tag
+
+  Run when not empty string tag:
+    when:
+      not:
+        equal:
+          - << pipeline.git.tag >>
+          - ""
+    jobs:
+      - Echo tag
+
+  Run unless empty string tag:
+    unless:
+      equal:
+        - << pipeline.git.tag >>
+        - ""
+    jobs:
+      - Echo tag
+
+  Run when version tag:
+    when:
+      matches:
+        value: << pipeline.git.tag >>
+        pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
+    jobs:
+      - Echo tag
+
+  Run when not version tag:
+    when:
+      not:
+        matches:
+          value: << pipeline.git.tag >>
+          pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
+    jobs:
+      - Echo tag
+
+  Run unless version tag:
+    unless:
+      matches:
+        value: << pipeline.git.tag >>
+        pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
+    jobs:
+      - Echo tag
