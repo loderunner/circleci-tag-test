@@ -68,20 +68,24 @@ workflows:
     jobs:
       - Echo tag:
           filters:
-            branches:
-              only: /.*/
             tags:
               only: /.*/
 
   Run when truthy tag:
     when: << pipeline.git.tag >>
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            tags:
+              only: /.*/
 
   Run unless truthy tag:
     unless: << pipeline.git.tag >>
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            tags:
+              only: /.*/
 
   Run when empty string tag:
     when:
@@ -89,7 +93,10 @@ workflows:
         - << pipeline.git.tag >>
         - ""
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            tags:
+              only: /.*/
 
   Run when not empty string tag:
     when:
@@ -98,7 +105,10 @@ workflows:
           - << pipeline.git.tag >>
           - ""
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            tags:
+              only: /.*/
 
   Run unless empty string tag:
     unless:
@@ -106,7 +116,10 @@ workflows:
         - << pipeline.git.tag >>
         - ""
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            tags:
+              only: /.*/
 
   Run when version tag:
     when:
@@ -114,7 +127,10 @@ workflows:
         value: << pipeline.git.tag >>
         pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            tags:
+              only: /.*/
 
   Run when not version tag:
     when:
@@ -123,7 +139,10 @@ workflows:
           value: << pipeline.git.tag >>
           pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            tags:
+              only: /.*/
 
   Run unless version tag:
     unless:
@@ -131,4 +150,7 @@ workflows:
         value: << pipeline.git.tag >>
         pattern: "^\\d+\\.\\d+\\.\\d+(-\\S+)?$"
     jobs:
-      - Echo tag
+      - Echo tag:
+          filters:
+            tags:
+              only: /.*/
